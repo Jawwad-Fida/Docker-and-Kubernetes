@@ -9,12 +9,15 @@ FROM node
 WORKDIR /app
 
 # COPY --> which files should go into the image
-### first dot --> call folder, sub-folders, and files should be copied into the image
-### second dot/path --> path inside the image where the files should be stored (inside the app folder).
-COPY . /app 
+# copy the dependencies into the app
+COPY package.json /app
 
 # After copying all local files, intall all dependencies
 RUN npm install
+
+### first dot --> call folder, sub-folders, and files should be copied into the image
+### second dot/path --> path inside the image where the files should be stored (inside the app folder).
+COPY . /app 
 
 # Expose a port to our local system (for communication with container)
 EXPOSE 80
@@ -26,3 +29,4 @@ CMD ["node", "server.js"]
 # writing image sha256:712796388293cfc364fc223201095eb363ae475c23f3fd980cc61eae11777b0a
 
 
+## Each instruction in this file creates a layer in the image (image layer based architecture)
