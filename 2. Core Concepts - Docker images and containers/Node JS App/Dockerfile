@@ -2,8 +2,9 @@
 
 ## Contains setup instructions for docker when we will build our own custom image from a pre-built image (docker hub)
 
-# FROM --> built own image on base image (docker hub)
-FROM node
+# FROM --> built own image on base image (docker hub) 
+# name:tag (if needed) e.g. node:14 --> a specific version
+FROM node  
 
 # all commands will be executed inside app folder
 WORKDIR /app

@@ -1,0 +1,87 @@
+### Docker commands --> Build containers and images
+
+1) Build an image for a container(Dockerfile)
+
+docker build . 
+OR, docker build -t name:tag . --> give image a name
+
+2) Build a container based on an image
+
+docker run --> run it attached mode (listen to output, show log in termina)
+
+* docker run -p LocalPortNo:ContainerPortNo imageID --> run and expose a port on the container
+(for apps that require network), OR
+
+* docker run -p LocalPortNo:ContainerPortNo --rm --name customContainerName imageID/imageTag
+--> Removing stopped containers automatically (--rm)
+
+* docker run -it --name customContainerName imageID/imageTag --> launch container in interactive mode, also expose sudo terminal for user input
+(for apps that do not require network), 
+
+* Launch a container(network) in detached mode
+--> docker run -p LocalPortNo:ContainerPortNo -d imageID 
+
+===================================
+
+### Docker commands --> To stop a container
+
+* docker ps -a --> list all running containers
+* docker stop containerName
+
+===================================
+
+### Docker commands --> restart a container
+
+Restart a container in detached mode (no listen to output from container)
+docker start containerName
+
+* if want to attach a detached container --> docker attach dockerName
+
+Restart a container in attached mode (listen to output from container)
+docker start -a containerName
+
+Restarting a container (for interaction)
+docker start -a -i containerName (start in attached mode and for interaction in terminal)
+
+=========================================
+
+### Remove containers
+
+containers must be stopped before being removed
+
+* docker ps -a
+* docker rm containerName1 containerName2 .....
+
+
+### Remove images (including the layers of the images)
+
+We can remove images if they are not being used anywhere. To remove a used image, we need to remove the container
+where the image is being used first.
+
+* docker images
+* docker rmi imageID1 imageID2 .....
+
+remove all images not being used by containers
+* docker image prune/ docker image prune -a
+
+========================================
+
+### Inspect an image
+
+inspect an image base layers and custom layers, configurations, etc.
+* docker image inspect imageID
+
+===========================
+
+
+### Others
+
+* docker --help
+* docker start --help
+* dokcer run --help
+* docker logs containerName --> see logs (all outputs) of a container
+
+
+
+
+
