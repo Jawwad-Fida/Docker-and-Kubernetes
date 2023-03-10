@@ -1,16 +1,17 @@
-### Docker commands --> Build containers and images
+### Docker commands --> Build images and run container based on image
 
 1) Build an image for a container(Dockerfile)
 
-docker build . 
-OR, docker build -t name:tag . --> give image a name
+* docker build . 
 
-2) Build a container based on an image
+* give image a name --> docker build -t name:tag . 
+
+2) Built a container based on an image
 
 docker run --> run it attached mode (listen to output, show log in termina)
 
 * docker run -p LocalPortNo:ContainerPortNo imageID --> run and expose a port on the container
-(for apps that require network), OR
+(for apps that require network)
 
 * docker run -p LocalPortNo:ContainerPortNo --rm --name customContainerName imageID/imageTag
 --> Removing stopped containers automatically (--rm)
@@ -21,29 +22,29 @@ docker run --> run it attached mode (listen to output, show log in termina)
 * Launch a container(network) in detached mode
 --> docker run -p LocalPortNo:ContainerPortNo -d imageID 
 
-===================================
+================================================
 
 ### Docker commands --> To stop a container
 
 * docker ps -a --> list all running containers
 * docker stop containerName
 
-===================================
+===============================================
 
 ### Docker commands --> restart a container
 
 Restart a container in detached mode (no listen to output from container)
-docker start containerName
+--> docker start containerName
 
 * if want to attach a detached container --> docker attach dockerName
 
 Restart a container in attached mode (listen to output from container)
-docker start -a containerName
+--> docker start -a containerName
 
 Restarting a container (for interaction)
-docker start -a -i containerName (start in attached mode and for interaction in terminal)
+--> docker start -a -i containerName (start in attached mode and for interaction in terminal)
 
-=========================================
+============================================
 
 ### Remove containers
 
@@ -64,14 +65,14 @@ where the image is being used first.
 remove all images not being used by containers
 * docker image prune/ docker image prune -a
 
-========================================
+===========================================
 
 ### Inspect an image
 
 inspect an image base layers and custom layers, configurations, etc.
 * docker image inspect imageID
 
-===========================
+=========================================
 
 
 ### Others
