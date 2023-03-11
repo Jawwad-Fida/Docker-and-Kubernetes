@@ -67,6 +67,39 @@ remove all images not being used by containers
 
 ===========================================
 
+### Pushing shared images to dockerhub
+
+create a public repository on docker.io to push image 
+e.g. jawwadulislam/node-hello-world
+
+need to login once to push image to docker 
+* docker login
+
+2 ways:
+1) Rebuilt image using docker hub name
+* docker build -t jawwadulislam/node-hello-world . 
+
+2) reuse current image (rename image first) --> creates a clone of the old image
+We must first let docker know that this image exists locally
+so rename your image to --> jawwadulislam/node-hello-world
+--> docker tag oldName newName
+* docker tag node:image1 jawwadulislam/node-hello-world
+* docker images
+
+Finally,
+docker push jawwadulislam/node-hello-world
+
+### Pulling images from dockerhub
+
+docker pull --> will always pull the latest image 
+
+* docker pull jawwadulislam/node-hello-world 
+* docke run -p 8000:30 --rm jawwadulislam/node-hello-world
+* docker stop containerName
+
+
+============================================
+
 ### Inspect an image
 
 inspect an image base layers and custom layers, configurations, etc.
