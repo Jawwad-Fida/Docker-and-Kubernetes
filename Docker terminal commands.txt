@@ -1,48 +1,49 @@
-### Docker commands --> Build images and run container based on image
+=========================== DOCKER COMMANDS ====================== 
 
 1) Build an image for a container(Dockerfile)
 
 * docker build . 
 
-* give image a name --> docker build -t name:tag . 
+* docker build -t name:tag . --> give image a name during build
 
-2) Built a container based on an image
+2) Run(build) a container based on an image
 
-docker run --> run it attached mode (listen to output, show log in termina)
+docker run --> run it attached mode (listen to output, show log in terminal) [Default]
 
-* docker run -p LocalPortNo:ContainerPortNo imageID --> run and expose a port on the container
+* docker run -p LocalPortNo:ContainerPortNo imageID/imageTag --> run and expose a port on the container 
 (for apps that require network)
 
+* Launch a container(network) in detached mode(-d) (no listen to output from container)
+--> docker run -p LocalPortNo:ContainerPortNo -d imageID
+
 * docker run -p LocalPortNo:ContainerPortNo --rm --name customContainerName imageID/imageTag
---> Removing stopped containers automatically (--rm)
+--> Removing stopped containers automatically (--rm), give container a name (--name)
 
 * docker run -it --name customContainerName imageID/imageTag --> launch container in interactive mode, also expose sudo terminal for user input
-(for apps that do not require network), 
+(for apps that do not require network)
 
-* Launch a container(network) in detached mode
---> docker run -p LocalPortNo:ContainerPortNo -d imageID 
 
 ================================================
 
-### Docker commands --> To stop a container
+### To stop a container
 
 * docker ps -a --> list all running containers
 * docker stop containerName
 
 ===============================================
 
-### Docker commands --> restart a container
+### Restart a container
 
 Restart a container in detached mode (no listen to output from container)
---> docker start containerName
+* docker start containerName
 
 * if want to attach a detached container --> docker attach dockerName
 
 Restart a container in attached mode (listen to output from container)
---> docker start -a containerName
+* docker start -a containerName
 
 Restarting a container (for interaction)
---> docker start -a -i containerName (start in attached mode and for interaction in terminal)
+* docker start -a -i containerName (start in attached mode and for interaction in terminal)
 
 ============================================
 
@@ -60,7 +61,7 @@ We can remove images if they are not being used anywhere. To remove a used image
 where the image is being used first.
 
 * docker images
-* docker rmi imageID1 imageID2 .....
+* docker rmi imageID1/imageTag imageID2/imageTag .....
 
 remove all images not being used by containers
 * docker image prune/ docker image prune -a
@@ -87,7 +88,7 @@ so rename your image to --> jawwadulislam/node-hello-world
 * docker images
 
 Finally,
-docker push jawwadulislam/node-hello-world
+* docker push jawwadulislam/node-hello-world
 
 ### Pulling images from dockerhub
 
@@ -95,27 +96,90 @@ docker pull --> will always pull the latest image
 
 * docker pull jawwadulislam/node-hello-world 
 * docke run -p 8000:30 --rm jawwadulislam/node-hello-world
-* docker stop containerName
-
 
 ============================================
 
 ### Inspect an image
 
 inspect an image base layers and custom layers, configurations, etc.
-* docker image inspect imageID
+* docker image inspect imageID/imageTag
+
+see the history of an image
+* docker image history imageID/imageTag
 
 =========================================
 
+### Anonymous Volumes, Named Volumes and Bind Mounts
+
+## List all Volumes
+* docker volume --help
+* docker volume ls
+* docker volume inspect VOLUME_NAME (inspect contents of a volume)
+
+## Creating Named volumes using -v
+--> e.g. docker run -d -p 3000:80 --rm --name feedback-app -v feedback:/app/feedback imageID/imageTag
+(-v volumeName:/pathInsideContainer)
+
+## Delete volumes
+* docker volume rm volumeName
+* or, docker volume prune
+
+## Bind Mounts(code sharing)
+
+Binding a folder in the local machine to a folder in the container
+* e.g. docker run -d -p 3000:80 --rm --name feedback-app -v NAMED_VOLUME -v "AbsoluteLocalFilepath:/app" imageID/imageName
+--> from absolute path in local machine to app folder in container(-v "AbsoluteLocalFilepath:/app" creates a bind mount)
+
+Note: If you don't always want to copy and use the full path, you can use these shortcuts for Absolute/Local/Filepath:
+--> macOS / Linux: -v $(pwd):/app
+--> Windows: -v "%cd%":/app
+
+## Combining and Merging different volumes
+
+tell docker not to override some files inside the container (prevent this using Anonymous volumes)
+* e.g. docker run -d --rm -p 3000:80 --name feedback-app -v NAMED_VOLUME -v "Absolute/Local/Filepath:/app" -v /app/node_modules imageID/imageName
+(/app/node_modules is the Anonymous volume)
+
+Overall summary of this module (An example)
+* docker build -t feedback-node:env .
+* docker run -d --rm -p 3000:80 --name feedback-app -v feedback:/app/feedback -v "%cd%":/app -v /app/node_modules -v /app/temp feedback-node:env
+
+Note: cannot remove volumes that are being used by a container. Need to stop and remove container first.
+============================================
+
+### Working with ARGument and runtime .env files
+
+We can set global env variables using docker
+
+in docker file
+* ENV PORT 80 --> PORT env variable is applicable in the entire app environement with a default value
+* EXPOSE $PORT --> $ sign for env variable in docker
+
+much better solution (more secured)
+* Create a .env file
+* Set PORT = 80 in the file
+* in docker run command --> docker run .... --env-file ./.env ............
+
+
+## Using Build Arguments (ARG)
+
+making ENV default value flexible (dynamic)
+
+--> in docker file
+* ARG DEFAULT_PORT=80 
+* ENV PORT $DEFAULT_PORT
+* EXPOSE $PORT
+
+e.g.
+* docker build -t feedback-node:web-app --build-arg DEFAULT_PORT=8000 .
+(changing port no. from 80 to 8000)
+
+==================================================
 
 ### Others
 
 * docker --help
 * docker start --help
 * dokcer run --help
-* docker logs containerName --> see logs (all outputs) of a container
-
-
-
-
+* docker logs containerName --> see logs (all outputs) of a container (useful for checking errors)
 
